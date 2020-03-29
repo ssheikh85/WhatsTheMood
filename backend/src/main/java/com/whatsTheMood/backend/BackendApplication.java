@@ -14,9 +14,10 @@ import twitter4j.TwitterException;
 public class BackendApplication {
 
 	@RequestMapping("/")
-	void home() throws IOException, TwitterException {
+	int home() throws IOException, TwitterException {
+		String tag = "#SundayMorning";
 		GoogleML googleClient = new GoogleML();
-		googleClient.getPrediction();
+		return googleClient.getPrediction(tag);
 	}
 
 	public static void main(String[] args) {

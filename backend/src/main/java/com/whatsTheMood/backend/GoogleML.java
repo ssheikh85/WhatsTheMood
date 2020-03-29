@@ -17,21 +17,23 @@ class GoogleML {
     private String projectId = "";
     private String modelId = "";
 
-    void getPrediction() throws IOException, TwitterException {
+    int getPrediction(String tag) throws IOException, TwitterException {
         Dotenv dotenv = Dotenv.load();
         TwitterAccess twitterClient = new TwitterAccess();
         this.projectId = dotenv.get("GOOGLE_PRJ_ID");
         this.modelId = dotenv.get("AUTOML_MODEL_ID");
 
-        List<String> tweets = twitterClient.getTweets("#SundayMorning");
+        List<String> tweets = twitterClient.getTweets(tag);
 
+        int totalScore = 0;
         for (String tweet : tweets) {
-            predict(projectId, modelId, tweet);
+            totalScore += predict(projectId, modelId, tweet);
         }
+        return totalScore;
 
     }
 
-    void predict(String projectId, String modelId, String content) throws IOException {
+    int predict(String projectId, String modelId, String content) throws IOException {
         // Initialize client that will be used to send requests. This client only needs
         // to be created
         // once, and can be reused for multiple requests. After completing all of your
@@ -51,10 +53,12 @@ class GoogleML {
 
             PredictResponse response = client.predict(predictRequest);
 
+            int sentimentScore = 0;
             for (AnnotationPayload annotationPayload : response.getPayloadList()) {
-                System.out.format("Predicted sentiment score: %d\n",
-                        annotationPayload.getTextSentiment().getSentiment());
+                sentimentScore = annotationPayload.getTextSentiment().getSentiment();
             }
+            return sentimentScore;
+
         }
     }
 }
