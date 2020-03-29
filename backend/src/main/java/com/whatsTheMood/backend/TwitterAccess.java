@@ -17,33 +17,28 @@ public class TwitterAccess {
     private final String lang = "en";
 
     List<String> getTweets(String searchItem) throws TwitterException {
-        try {
-            Dotenv dotenv = Dotenv.load();
-            this.consumerAPIKey = dotenv.get("CONSUMER_API_KEY");
-            this.consumerAPISecret = dotenv.get("CONSUMER_API_SECRET");
-            this.accessToken = dotenv.get("ACCESS_TOKEN");
-            this.accessSecret = dotenv.get("ACCESS_SECRET");
-            ConfigurationBuilder cb = new ConfigurationBuilder();
-            cb.setDebugEnabled(true).setOAuthConsumerKey(this.consumerAPIKey)
-                    .setOAuthConsumerSecret(this.consumerAPISecret).setOAuthAccessToken(this.accessToken)
-                    .setOAuthAccessTokenSecret(this.accessSecret);
+        Dotenv dotenv = Dotenv.load();
+        this.consumerAPIKey = dotenv.get("CONSUMER_API_KEY");
+        this.consumerAPISecret = dotenv.get("CONSUMER_API_SECRET");
+        this.accessToken = dotenv.get("ACCESS_TOKEN");
+        this.accessSecret = dotenv.get("ACCESS_SECRET");
 
-            TwitterFactory tf = new TwitterFactory(cb.build());
-            Twitter twitter = tf.getInstance();
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true).setOAuthConsumerKey(this.consumerAPIKey).setOAuthConsumerSecret(this.consumerAPISecret)
+                .setOAuthAccessToken(this.accessToken).setOAuthAccessTokenSecret(this.accessSecret);
 
-            Query query = new Query(searchItem).count(this.tweetCount).lang(this.lang);
-            QueryResult result = twitter.search(query);
+        TwitterFactory tf = new TwitterFactory(cb.build());
+        Twitter twitter = tf.getInstance();
 
-            List<String> resultList = new ArrayList<String>();
-            for (Status status : result.getTweets()) {
-                resultList.add(status.getText());
-            }
+        Query query = new Query(searchItem).count(this.tweetCount).lang(this.lang);
+        QueryResult result = twitter.search(query);
 
-            return resultList;
-
-        } catch (TwitterException e) {
-            throw e;
+        List<String> resultList = new ArrayList<String>();
+        for (Status status : result.getTweets()) {
+            resultList.add(status.getText());
         }
+
+        return resultList;
 
     }
 }

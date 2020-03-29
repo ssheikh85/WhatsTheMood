@@ -1,24 +1,22 @@
 package com.whatsTheMood.backend;
 
-import java.util.*;
+import java.io.IOException;
+
+// import java.util.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
-import twitter4j.*;
+
+import twitter4j.TwitterException;
 
 @RestController
 @SpringBootApplication
 public class BackendApplication {
 
 	@RequestMapping("/")
-	List<String> home() throws TwitterException {
-		try {
-			TwitterAccess twitterClient = new TwitterAccess();
-			return twitterClient.getTweets("#SundayMorning");
-		} catch (TwitterException e) {
-			throw e;
-		}
-
+	void home() throws IOException, TwitterException {
+		GoogleML googleClient = new GoogleML();
+		googleClient.getPrediction();
 	}
 
 	public static void main(String[] args) {
