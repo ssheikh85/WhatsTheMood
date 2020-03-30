@@ -7,8 +7,8 @@ import {
   SafeAreaView,
   View
 } from "react-native";
-import { apiUrl } from "./config";
 import Emoji from "react-native-emoji";
+import { apiUrl } from "./config";
 
 const App = () => {
   const [scoreState, setScoreState] = useState(0);
@@ -29,8 +29,9 @@ const App = () => {
     }
   };
 
-  const getPrediction = async () => {
+  const getPrediction = async event => {
     try {
+      event.preventDefault();
       const response = await fetch(`${apiUrl}"${tag}`, {
         method: "GET",
         mode: "cors"
@@ -39,6 +40,7 @@ const App = () => {
       const returnedResponse = await response.json();
       const { data } = returnedResponse;
       setScoreState(data);
+      setTag("");
     } catch (error) {
       console.error(error);
     }
@@ -48,12 +50,12 @@ const App = () => {
     <View style={styles.container}>
       <SafeAreaView>
         <Text style={styles.header}>How do Twitter users feel?</Text>
-        {tag === "" || scoreState === 0 ? (
+        {scoreState === 0 ? (
           <Emoji name=":wink:" style={styles.emoji} />
         ) : (
           <ReactionRenderer scoreProp={scoreState} />
         )}
-        <Text style={styles.prompt}>Enter something below to find out</Text>
+        <Text style={styles.prompt}>Enter something below to find out!</Text>
         <TextInput
           style={styles.textIn}
           onChangeText={text => setTag(text)}
@@ -79,18 +81,24 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   header: {
-    fontSize: 30
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#4B88A2"
   },
   emoji: {
-    fontSize: 70
+    fontSize: 100,
+    margin: 25,
+    textAlign: "center"
   },
   prompt: {
+    textAlign: "center",
     fontSize: 14
   },
   textIn: {
     height: 30,
     borderColor: "gray",
-    borderWidth: 1
+    borderWidth: 1,
+    margin: 15
   }
 });
 
