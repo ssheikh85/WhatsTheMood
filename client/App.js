@@ -8,10 +8,26 @@ import {
   View
 } from "react-native";
 import { apiUrl } from "./config";
+import Emoji from "react-native-emoji";
 
 const App = () => {
-  const [score, setScore] = useState(0);
+  const [scoreState, setScoreState] = useState(0);
   const [tag, setTag] = useState("");
+
+  const ReactionRenderer = score => {
+    const { scoreProp } = score;
+    const scoreToCompare = parseInt(scoreProp);
+
+    if (scoreToCompare >= 150) {
+      return <Emoji name=":heart_eyes:" style={styles.emoji} />;
+    } else if (scoreToCompare >= 100 && scoreToCompare < 150) {
+      return <Emoji name=":grinning:" style={styles.emoji} />;
+    } else if (scoreToCompare >= 50 && scoreToCompare < 100) {
+      return <Emoji name=":neutral_face:" style={styles.emoji} />;
+    } else if (scoreToCompare < 50) {
+      return <Emoji name=":unamused:" style={styles.emoji} />;
+    }
+  };
 
   const getPrediction = async () => {
     try {
@@ -21,7 +37,8 @@ const App = () => {
       });
 
       const returnedResponse = await response.json();
-      setScore(data);
+      const { data } = returnedResponse;
+      setScoreState(data);
     } catch (error) {
       console.error(error);
     }
@@ -31,9 +48,12 @@ const App = () => {
     <View style={styles.container}>
       <SafeAreaView>
         <Text style={styles.header}>How do Twitter users feel?</Text>
-        <Text style={styles.prompt}>
-          Enter a hashtag or something trending below, to find out
-        </Text>
+        {tag === "" || scoreState === 0 ? (
+          <Emoji name=":wink:" style={styles.emoji} />
+        ) : (
+          <ReactionRenderer scoreProp={scoreState} />
+        )}
+        <Text style={styles.prompt}>Enter something below to find out</Text>
         <TextInput
           style={styles.textIn}
           onChangeText={text => setTag(text)}
@@ -56,10 +76,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "#CDE7B0",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "center"
   },
   header: {
     fontSize: 30
+  },
+  emoji: {
+    fontSize: 70
   },
   prompt: {
     fontSize: 14

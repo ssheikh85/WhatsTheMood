@@ -27,7 +27,11 @@ class GoogleML {
 
         int totalScore = 0;
         for (String tweet : tweets) {
-            totalScore += predict(this.projectId, this.modelId, tweet);
+            if (!(tag instanceof String) || !tag.isEmpty()) {
+                totalScore += predict(this.projectId, this.modelId, tweet);
+            } else {
+                continue;
+            }
         }
         return totalScore;
 
