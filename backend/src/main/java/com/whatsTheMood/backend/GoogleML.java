@@ -27,7 +27,7 @@ class GoogleML {
 
         int totalScore = 0;
         for (String tweet : tweets) {
-            totalScore += predict(projectId, modelId, tweet);
+            totalScore += predict(this.projectId, this.modelId, tweet);
         }
         return totalScore;
 
@@ -43,9 +43,10 @@ class GoogleML {
         try (PredictionServiceClient client = PredictionServiceClient.create()) {
             // Get the full path of the model.
             ModelName name = ModelName.of(projectId, "us-central1", modelId);
-            TextSnippet textSnippet = TextSnippet.newBuilder().setContent(content).setMimeType("text/plain") // Types:
-                                                                                                             // text/plain,
-                                                                                                             // text/html
+            TextSnippet textSnippet = TextSnippet.newBuilder().setContent(content).setMimeType("text/plain")
+                    // Types:
+                    // text/plain,
+                    // text/html
                     .build();
             ExamplePayload payload = ExamplePayload.newBuilder().setTextSnippet(textSnippet).build();
             PredictRequest predictRequest = PredictRequest.newBuilder().setName(name.toString()).setPayload(payload)

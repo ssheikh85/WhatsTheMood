@@ -21,8 +21,7 @@ const App = () => {
         mode: "cors"
       });
 
-      const retrievedScore = await response;
-      console.log(retrievedScore);
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
