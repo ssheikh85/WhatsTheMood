@@ -21,7 +21,9 @@ const App = () => {
         mode: "cors"
       });
 
-      console.log(response);
+      const returnedResponse = await response.json();
+      const { data } = returnedResponse;
+      setScore(data);
     } catch (error) {
       console.error(error);
     }
