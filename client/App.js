@@ -15,14 +15,12 @@ const App = () => {
 
   const getPrediction = async () => {
     try {
-      console.log(`${apiUrl}"${tag}"`);
       const response = await fetch(`${apiUrl}"${tag}`, {
         method: "GET",
         mode: "cors"
       });
 
       const returnedResponse = await response.json();
-      const { data } = returnedResponse;
       setScore(data);
     } catch (error) {
       console.error(error);
