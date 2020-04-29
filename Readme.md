@@ -1,5 +1,7 @@
 ### WhatsTheMood
 
+#### Google AutoML Natural Language Cloud project has been removed from my Google Cloud account and will need to recreated to use the application
+
 #### About
 
 A Twitter sentiment analyzer developed using Google AutoML Natural Language Sentiment analysis API, Twitter's API, Spring Boot, Maven, Java, expo and React Native
